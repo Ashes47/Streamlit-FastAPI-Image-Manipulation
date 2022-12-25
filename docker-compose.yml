@@ -1,18 +1,18 @@
 version: '1'
 
 services:
-  # fastapi:
-  #   build: fastapi/
-  #   ports: 
-  #     - 8000:8000
-  #   networks:
-  #     - deploy_network
-  #   container_name: fastapi
+  fastapi:
+    build: fastapi/
+    ports: 
+      - 8000:8000
+    networks:
+      - deploy_network
+    container_name: fastapi
 
   streamlit:
-    build: frontend/
-    # depends_on:
-    #   - fastapi
+    build: streamlit/
+    depends_on:
+      - fastapi
     ports: 
         - 8501:8501
     networks:
