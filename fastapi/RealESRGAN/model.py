@@ -1,10 +1,27 @@
 import torch
+import os
 from torch.nn import functional as F
 from PIL import Image
 import numpy as np
+from huggingface_hub import hf_hub_url, cached_download
 from .rrdbnet_arch import RRDBNet
 from .utils import pad_reflect, split_image_into_overlapping_patches, stich_together, \
                    unpad_image
+
+HF_MODELS = {
+    2: dict(
+        repo_id='sberbank-ai/Real-ESRGAN',
+        filename='RealESRGAN_x2.pth',
+    ),
+    4: dict(
+        repo_id='sberbank-ai/Real-ESRGAN',
+        filename='RealESRGAN_x4.pth',
+    ),
+    8: dict(
+        repo_id='sberbank-ai/Real-ESRGAN',
+        filename='RealESRGAN_x8.pth',
+    ),
+}
 
 
 class RealESRGAN:
@@ -17,6 +34,15 @@ class RealESRGAN:
         )
         
     def load_weights(self, model_path, download=True):
+
+        if not os.path.exists(model_path) and download:
+            assert self.scale in [2,4,8], 'You can download models only with scales: 2, 4, 8'
+            config = HF_MODELS[self.scale]
+            cache_dir = os.path.dirname(model_path)
+            local_filename = os.path.basename(model_path)
+            config_file_url = hf_hub_url(repo_id=config['repo_id'], filename=config['filename'])
+            cached_download(config_file_url, cache_dir=cache_dir, force_filename=local_filename)
+            print('Weights downloaded to:', os.path.join(cache_dir, local_filename))
        
         loadnet = torch.load(model_path)
         if 'params' in loadnet:

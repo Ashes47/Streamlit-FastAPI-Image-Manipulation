@@ -5,3 +5,4 @@ numpy
 gunicorn
 uvicorn
 Pillow
+huggingface-hub
