@@ -6,3 +6,5 @@ gunicorn
 uvicorn
 Pillow
 huggingface-hub
+torch>=1.7
+torchvision>=0.8.0

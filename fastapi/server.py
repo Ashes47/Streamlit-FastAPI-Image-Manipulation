@@ -2,7 +2,7 @@ import io
 from starlette.responses import Response
 from fastapi import FastAPI, File, Form
 import threading
-from upscale import load_models, upscale
+from upscale import load_models, upscale, get_device
 
 app = FastAPI(
     title="Upscale Images",
@@ -12,7 +12,10 @@ app = FastAPI(
 
 @app.get("/upscale/threads")
 async def get_threads_running():
-    return {"threads_running": threading.active_count()}
+    return {
+        "threads_running": threading.active_count(),
+        "device": get_device()
+        }
 
 
 @app.post("/upscale")

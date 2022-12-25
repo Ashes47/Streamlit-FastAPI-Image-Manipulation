@@ -7,8 +7,12 @@ import torch
 from RealESRGAN import RealESRGAN
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(f"Devise in use: {device}")
 
+def get_device():
+    if torch.cuda.is_available():
+        return 'cuda'
+    return 'cpu'
+    
 def load_models(model_scale):
     if model_scale == 2:
         model_2 = RealESRGAN(device, scale = model_scale)

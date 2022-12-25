@@ -62,5 +62,6 @@ if st.button('Check Status'):
     try:
         data = requests.get(statusAPI).json()
         st.write(f"Threads Running: {data['threads_running']}")
+        st.write(f"Device: {data['device']}")
     except Exception as e:
         st.error(e)
